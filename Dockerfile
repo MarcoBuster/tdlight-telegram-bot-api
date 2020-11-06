@@ -8,6 +8,8 @@ RUN apk --no-cache add \
     gperf \
     linux-headers
 
+WORKDIR /src
+
 COPY CMakeLists.txt /src
 COPY docker-entrypoint.sh /src
 RUN mkdir -p /src/td
