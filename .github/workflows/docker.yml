@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         REGISTRY: ghcr.io
-        IMAGE_TAG: ghcr.io/MarcoBuster/tdlightbotapi
+        IMAGE_TAG: ghcr.io/marcobuster/tdlightbotapi
 
     steps:
       - name: Checkout current repo
@@ -48,9 +48,9 @@ jobs:
           echo "hash version: $HASH_VERSION"
           echo "version: $VERSION"
 
-      - name: Fetch latest cached image
-        run: |
-          docker pull $IMAGE_TAG:latest
+      #- name: Fetch latest cached image
+      #  run: |
+      #    docker pull $IMAGE_TAG:latest
 
       - name: Build image
         run: |
