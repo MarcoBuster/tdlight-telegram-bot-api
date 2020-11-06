@@ -10,7 +10,7 @@ jobs:
     name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-        IMAGE_id: docker.pkg.github.com/${{ github.repository }}/tdlightbotapi
+        IMAGE_id: ghcr.io/${{ github.repository }}
 
     steps:
       - name: Checkout current repo
@@ -110,7 +110,7 @@ jobs:
 
       - name: Save image as tar archive
         run: |
-          echo "${{ secrets.GH_ACCESS_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GH_ACCESS_TOKEN }}" | docker ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
