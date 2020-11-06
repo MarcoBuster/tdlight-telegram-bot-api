@@ -8,12 +8,7 @@ RUN apk --no-cache add \
     gperf \
     linux-headers
 
-WORKDIR /src
-
-COPY CMakeLists.txt /src
-COPY docker-entrypoint.sh /src
-ADD td /src/td
-ADD telegram-bot-api /src/telegram-bot-api
+COPY . /src
 
 WORKDIR /src/build
 
