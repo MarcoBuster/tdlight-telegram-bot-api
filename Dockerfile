@@ -10,8 +10,8 @@ RUN apk --no-cache add \
 
 COPY CMakeLists.txt /src
 COPY docker-entrypoint.sh /src
-ADD td/ /src/td
-ADD telegram-bot-api/ /src/telegram-bot-api
+ADD td /src/td
+ADD telegram-bot-api /src/telegram-bot-api
 
 WORKDIR /src/build
 
