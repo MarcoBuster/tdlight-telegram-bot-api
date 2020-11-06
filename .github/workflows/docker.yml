@@ -118,8 +118,7 @@ jobs:
 
       - name: Save image as tar archive
         run: |
-          docker image ls  # debug
-          docker save ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+          echo "${{ secrets.GH_ACCESS_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
