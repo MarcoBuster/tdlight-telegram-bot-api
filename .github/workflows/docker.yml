@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         REGISTRY: docker.pkg.github.com
-        IMAGE_TAG: $REGISTRY/${{ github.repository }}/tdlightbotapi
+        IMAGE_TAG: ${{ REGISTRY }}/${{ github.repository }}/tdlightbotapi
 
     steps:
       - name: Checkout current repo
