@@ -10,7 +10,7 @@ jobs:
     name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-        IMAGE_id: docker.pkg.github.com/${{ github.repository }}
+        IMAGE_id: docker.pkg.github.com/${{ github.repository }}/tdlight-telegram-bot-api
 
     steps:
       - name: Checkout current repo
