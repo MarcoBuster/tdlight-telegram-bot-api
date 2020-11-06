@@ -103,14 +103,10 @@ jobs:
 
       - name: Tag and push image
         run: |
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker push ${{ env.IMAGE_TAG}}:${{ env.HASH_VERSION}}-${{ env.SAFE_ARCH }}
-          docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker push ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
-          docker push ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker build \
+            --tag tdlight-team/tdlight-telegram-bot-api:latest \
+            --tag tdlight-team/tdlight-telegram-bot-api:$version \
+            .
 
       - name: Save image as tar archive
         run: |
