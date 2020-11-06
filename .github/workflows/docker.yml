@@ -10,8 +10,8 @@ jobs:
     name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-        REGISTRY: docker.pkg.github.com
-        IMAGE_TAG: docker.pkg.github.com/${{ github.repository }}/tdlightbotapi
+        REGISTRY: ghcr.io
+        IMAGE_TAG: ghcr.io/tdlight-team/tdlightbotapi
 
     steps:
       - name: Checkout current repo
@@ -62,6 +62,7 @@ jobs:
       - name: Tag and push image
         run: |
           docker build \
+            --cache-from $IMAGE_TAG:latest \
             --tag $IMAGE_TAG:$HASH_VERSION \
             --tag $IMAGE_TAG:$VERSION \
             .
@@ -72,8 +73,8 @@ jobs:
 
       - name: Load environment info and built images
         run: |
-          docker push $IMAGE_TAG:$HASH_VERSION
           docker push $IMAGE_TAG:$VERSION
+          docker push $IMAGE_TAG:$HASH_VERSION
 
       - name: Logout from registry
         run: |
