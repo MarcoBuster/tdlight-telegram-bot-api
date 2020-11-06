@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         REGISTRY: ghcr.io
-        IMAGE_TAG: ghcr.io/tdlight-team/tdlightbotapi
+        IMAGE_TAG: ghcr.io/MarcoBuster/tdlightbotapi
 
     steps:
       - name: Checkout current repo
