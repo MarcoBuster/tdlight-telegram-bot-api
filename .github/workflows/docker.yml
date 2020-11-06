@@ -48,6 +48,10 @@ jobs:
           echo "hash version: $HASH_VERSION"
           echo "version: $VERSION"
 
+      - name: Fetch latest cached image
+        run: |
+          docker pull $IMAGE_TAG:latest
+
       - name: Build image
         run: |
           docker build \
