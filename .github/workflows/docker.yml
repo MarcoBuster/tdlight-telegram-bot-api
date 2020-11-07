@@ -68,6 +68,6 @@ jobs:
           platforms: linux/386
           push: true
           tags: |
-            $IMAGE_TAG:$VERSION
-            $IMAGE_TAG:$HASH_VERSION
+            ${{ IMAGE_TAG }}:${{ VERSION }}
+            ${{ IMAGE_TAG }}:${{ HASH_VERSION }}
 
