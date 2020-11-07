@@ -12,7 +12,7 @@ jobs:
     name: Build Docker image
     runs-on: ubuntu-latest
     env:
-      IMAGE_TAG: ghcr.io/marcobuster/tdlightbotapi
+      IMAGE_TAG: ghcr.io/${{ github.repository }}
 
     steps:
       - name: Checkout current repo
@@ -34,8 +34,8 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
  
-          # Convert IMAGE_ID and VERSION to lowercase (repository name must be lowercase)
-          IMAGE_ID=$(echo "$IMAGE_ID" | awk '{print tolower($0)}')
+          # Convert IMAGE_TAG, HASH_VERSION and VERSION to lowercase (repository name must be lowercase)
+          IMAGE_TAG=$(echo "$IMAGE_TAG" | awk '{print tolower($0)}')
           HASH_VERSION=$(echo "$HASH_VERSION" | awk '{print tolower($0)}')
           VERSION=$(echo "$VERSION" | awk '{print tolower($0)}')
 
@@ -75,7 +75,7 @@ jobs:
           file: ./Dockerfile
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
-          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le, linux/s390x
+          platforms: linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64
           push: true
           tags: |
             ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}
