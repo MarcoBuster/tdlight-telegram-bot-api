@@ -19,7 +19,7 @@ jobs:
       - name: Checkout current repo
         uses: actions/checkout@v2
         with:
-            submodules: "recursive"
+          submodules: "recursive"
 
       - name: Get version
         run: |
@@ -48,27 +48,27 @@ jobs:
           echo "hash version: $HASH_VERSION"
           echo "version: $VERSION"
 
-      - name: Fetch latest cached image
-        run: |
-          docker pull $IMAGE_TAG:latest
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Build image
-        run: |
-          docker build \
-            --cache-from $IMAGE_TAG:latest \
-            --tag $IMAGE_TAG:$HASH_VERSION \
-            --tag $IMAGE_TAG:$VERSION \
-            .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Login to registry
-        run: |
-          echo "${{ secrets.GH_ACCESS_TOKEN }}" | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_ACCESS_TOKEN }}
 
-      - name: Push images
-        run: |
-          docker push $IMAGE_TAG:$VERSION
-          docker push $IMAGE_TAG:$HASH_VERSION
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/386
+          push: true
+          tags: |
+            $IMAGE_TAG:$VERSION
+            $IMAGE_TAG:$HASH_VERSION
 
-      - name: Logout from registry
-        run: |
-          docker logout $REGISTRY
