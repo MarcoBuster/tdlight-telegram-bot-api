@@ -9,10 +9,13 @@ on:
 
 jobs:
   build:
-    name: Build Docker image
+    name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-        IMAGE_TAG: ghcr.io/marcobuster/tdlightbotapi
+      IMAGE_TAG: ghcr.io/marcobuster/tdlightbotapi
+    strategy:
+      matrix:
+        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le, linux/s390x]
 
     steps:
       - name: Checkout current repo
@@ -57,9 +60,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: ${{ runner.os }}-buildx-${{ matrix.arch}}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-
+            ${{ runner.os }}-buildx-${{ matrix.arch }}-
 
       - name: Login to registry
         uses: docker/login-action@v1
@@ -75,7 +78,7 @@ jobs:
           file: ./Dockerfile
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
-          platforms: linux/386
+          platforms: ${{ matrix.arch }}
           push: true
           tags: |
             ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
