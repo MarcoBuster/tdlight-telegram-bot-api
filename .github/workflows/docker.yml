@@ -9,13 +9,10 @@ on:
 
 jobs:
   build:
-    name: Build Docker image (${{ matrix.arch }})
+    name: Build Docker image
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ghcr.io/marcobuster/tdlightbotapi
-    strategy:
-      matrix:
-        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le, linux/s390x]
 
     steps:
       - name: Checkout current repo
@@ -78,7 +75,7 @@ jobs:
           file: ./Dockerfile
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
-          platforms: ${{ matrix.arch }}
+          platforms: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le, linux/s390x]
           push: true
           tags: |
             ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
