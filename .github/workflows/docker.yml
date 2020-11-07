@@ -12,7 +12,7 @@ jobs:
     name: Build Docker image
     runs-on: ubuntu-latest
     env:
-      IMAGE_TAG: ghcr.io/${{ github.repository }}
+      IMAGE_TAG: ghcr.io/${{ github.repository_owner }}/tdlightbotapi
 
     steps:
       - name: Checkout current repo
@@ -40,6 +40,7 @@ jobs:
           VERSION=$(echo "$VERSION" | awk '{print tolower($0)}')
 
           # Store variable for future use
+          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
           echo "HASH_VERSION=$HASH_VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
