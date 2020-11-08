@@ -56,7 +56,7 @@ jobs:
           echo "safe arch: $SAFE_ARCH"
 
           # Save env to file
-          echo $GITHUB_ENV > github.env
+          cat $GITHUB_ENV > github.env
 
       - name: Upload environment info as artifact
         uses: actions/upload-artifact@v2
