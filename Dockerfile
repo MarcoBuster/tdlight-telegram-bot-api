@@ -6,8 +6,8 @@ WORKDIR /usr/src/telegram-bot-api
 
 COPY CMakeLists.txt /src
 COPY docker-entrypoint.sh /src
-ADD td /src/td
-ADD telegram-bot-api /src/telegram-bot-api
+ADD td /usr/src/telegram-bot-api/td
+ADD telegram-bot-api /usr/src/telegram-bot-api/telegram-bot-api
 
 RUN mkdir -p build \
  && cd build \
