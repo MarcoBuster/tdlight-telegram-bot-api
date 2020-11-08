@@ -4,8 +4,8 @@ RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-de
 
 WORKDIR /usr/src/telegram-bot-api
 
-COPY CMakeLists.txt /src
-COPY docker-entrypoint.sh /src
+COPY CMakeLists.txt /usr/src/telegram-bot-api
+COPY docker-entrypoint.sh /usr/src/telegram-bot-api
 ADD td /usr/src/telegram-bot-api/td
 ADD telegram-bot-api /usr/src/telegram-bot-api/telegram-bot-api
 
