@@ -96,17 +96,17 @@ jobs:
           push: false
           load: true
           tags: |
-            tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+            tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
 
-      - name: Push image
+      - name: Tag image
         run: |
-          docker tag tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
-          docker push ${{ env.IMAGE_TAG}}:${{ env.VERSION}}-${{ env.SAFE_ARCH }}
+          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          # docker push ${{ env.IMAGE_TAG}}:${{ env.VERSION}}-${{ env.SAFE_ARCH }}
 
       - name: Save image as tar archive
         run: |
           docker image ls  # debug
-          docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+          docker save ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
@@ -141,10 +141,10 @@ jobs:
 
       - name: Create and push manifest
         run: |
-          docker manifest create ${{ env.IMAGE_TAG }}:${{ env.VERSION }} \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxamd64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
+          docker manifest create ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }} \
+          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 \
+          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 \
+          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64
 
-          docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
+          docker manifest push ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}
 
