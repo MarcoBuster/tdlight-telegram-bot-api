@@ -99,6 +99,7 @@ jobs:
 
       - name: Save image as tar archive
         run: |
+          docker image ls  # debug
           docker save tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Push image

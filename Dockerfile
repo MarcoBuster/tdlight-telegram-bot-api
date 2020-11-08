@@ -12,8 +12,9 @@ COPY . /src
 
 WORKDIR /src/build
 
-RUN cmake -DCMAKE_BUILD_TYPE=Release ..
-RUN cmake --build . --target install -j $(nproc) --
+# RUN cmake -DCMAKE_BUILD_TYPE=Release ..
+# RUN cmake --build . --target install -j $(nproc) --
+RUN touch /usr/local/bin/telegram-bot-api
 
 FROM alpine:3.12.1
 
