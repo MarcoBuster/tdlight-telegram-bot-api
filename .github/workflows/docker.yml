@@ -117,6 +117,8 @@ jobs:
   push-manifest:
     name: Create and push multi-arch Docker manifest
     runs-on: ubuntu-latest
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
     needs: build
 
     steps:
