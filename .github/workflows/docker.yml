@@ -135,7 +135,6 @@ jobs:
           docker load --input image_linuxarmv7/linuxarmv7.tar
           docker load --input image_linuxarm64/linuxarm64.tar
           docker load --input image_linuxppc64le/linuxppc64le.tar
-          docker load --input image_linux390x/linux390x.tar
 
       - name: Login to registry
         uses: docker/login-action@v1
