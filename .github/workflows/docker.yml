@@ -126,9 +126,9 @@ jobs:
       - name: Load environment info and built images
         run: |
           cat github_env/github.env > $GITHUB_ENV
-          docker load image_linuxamd64/linuxamd64.tar
-          docker load image_linuxarmv6/linuxarmv6.tar
-          docker load image_linuxarm64/linuxarm64.tar
+          docker load --input image_linuxamd64/linuxamd64.tar
+          docker load --input image_linuxarmv6/linuxarmv6.tar
+          docker load --input image_linuxarm64/linuxarm64.tar
 
       - name: Login to registry
         uses: docker/login-action@v1
