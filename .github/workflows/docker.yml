@@ -1,4 +1,4 @@
-name: Docker Build + Image Push
+name: Docker multi-arch build and push
 
 on:
   push:
@@ -102,7 +102,7 @@ jobs:
           docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH}} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
-        uses: upload/artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: image_${{ matrix.arch }}
           path: ${{ env.SAFE_ARCH }}.tar
