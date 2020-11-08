@@ -93,14 +93,18 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
           platforms: ${{ matrix.arch }}
-          push: true
+          push: false
           tags: |
-            ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
             tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
 
       - name: Save image as tar archive
         run: |
-          docker save tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH}} -o ${{ env.SAFE_ARCH }}.tar
+          docker save tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
+
+      - name: Push image
+        run: |
+          docker tag tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker push ${{ env.IMAGE_TAG}}:${{ env.VERSION}}-${{ env.SAFE_ARCH }}
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
