@@ -98,15 +98,15 @@ jobs:
           tags: |
             tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
 
-      - name: Save image as tar archive
-        run: |
-          docker image ls  # debug
-          docker save tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
-
       - name: Push image
         run: |
           docker tag tdlightbotapi:${{ env.VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG}}:${{ env.VERSION}}-${{ env.SAFE_ARCH }}
+
+      - name: Save image as tar archive
+        run: |
+          docker image ls  # debug
+          docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
         uses: actions/upload-artifact@v2
@@ -125,10 +125,10 @@ jobs:
 
       - name: Load environment info and built images
         run: |
-          cat github_env > $GITHUB_ENV
-          docker load image_linuxamd64
-          docker load image_linuxarmv6
-          docker load image_linuxarm64
+          cat github_env/github.env > $GITHUB_ENV
+          docker load image_linuxamd64/linuxamd64.tar
+          docker load image_linuxarmv6/linuxarmv6.tar
+          docker load image_linuxarm64/linuxarm64.tar
 
       - name: Login to registry
         uses: docker/login-action@v1
