@@ -15,7 +15,7 @@ jobs:
       IMAGE_TAG: ghcr.io/${{ github.repository_owner }}/tdlightbotapi
     strategy:
       matrix:
-        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le, linux/390x]
+        arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le]
 
     steps:
       - name: Checkout current repo
@@ -152,8 +152,7 @@ jobs:
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le.tar \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux390x.tar
+          --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le.tar
           docker manifest push ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}
 
           # Tag images as VERSION (like 'latest')
@@ -163,7 +162,6 @@ jobs:
           docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7
           docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64
           docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
-          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux390x ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux390x
 
           docker manifest create ${{ env.IMAGE_TAG }}:${{ env.VERSION }} \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux386 \
@@ -171,7 +169,6 @@ jobs:
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv6 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarmv7 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le \
-          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linux390x
+          --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
 
