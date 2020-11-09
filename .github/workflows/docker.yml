@@ -40,6 +40,7 @@ jobs:
  
           # Convert IMAGE_TAG, HASH_VERSION and VERSION to lowercase (repository name must be lowercase)
           IMAGE_TAG=$(echo "$IMAGE_TAG" | awk '{print tolower($0)}')
+          IMAGE_TAG_DH=$(echo "$IMAGE_TAG_DH" | awk '{print tolower($0)}')
           HASH_VERSION=$(echo "$HASH_VERSION" | awk '{print tolower($0)}')
           VERSION=$(echo "$VERSION" | awk '{print tolower($0)}')
           GITHUB_ACTOR=$(echo "${{ github.actor }}" | awk '{print tolower($0)}')
@@ -48,6 +49,7 @@ jobs:
 
           # Store variable for future use
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "IMAGE_TAG_DH=$IMAGE_TAG_DH" >> $GITHUB_ENV
           echo "HASH_VERSION=$HASH_VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "SAFE_ARCH=$SAFE_ARCH" >> $GITHUB_ENV
