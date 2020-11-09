@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ghcr.io/${{ github.repository_owner }}/tdlightbotapi
+      IMAGE_TAG_DH: ${{ github.repository_owner }}/tdlightbotapi
     strategy:
       matrix:
         arch: [linux/386, linux/amd64, linux/arm/v6, linux/arm/v7, linux/arm64, linux/ppc64le]
@@ -78,12 +79,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-${{ env.SAFE_ARCH }}-
 
-      - name: Login to registry
+      - name: Login to ghcr registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - name: Login to Docker Hub registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
       - name: Build image
         uses: docker/build-push-action@v2
@@ -102,8 +109,12 @@ jobs:
         run: |
           docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
           docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
+          docker tag tdlightbotapi:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }} ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG}}:${{ env.HASH_VERSION}}-${{ env.SAFE_ARCH }}
           docker push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
+          docker push ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-${{ env.SAFE_ARCH }}
+          docker push ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }}
 
       - name: Save image as tar archive
         run: |
@@ -137,15 +148,22 @@ jobs:
           docker load --input image_linuxarm64/linuxarm64.tar
           docker load --input image_linuxppc64le/linuxppc64le.tar
 
-      - name: Login to registry
+      - name: Login to ghcr registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GH_ACCESS_TOKEN }}
 
+      - name: Login to Docker Hub registry
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+
       - name: Create and push manifest
         run: |
+          # -- Push to ghcr.io
           docker manifest create ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }} \
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 \
@@ -171,4 +189,38 @@ jobs:
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxarm64 \
           --amend ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-linuxppc64le
           docker manifest push ${{ env.IMAGE_TAG }}:${{ env.VERSION }}
+
+          # -- Push to Docker Hub
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linux386
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxamd64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv6
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv7
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarm64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxppc64le
+
+          docker manifest create ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }} \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linux386 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linuxamd64 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linuxarmv6 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linuxarmv7 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linuxarm64 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}-linuxppc64le
+          docker manifest push ${{ env.IMAGE_TAG_DH }}:${{ env.HASH_VERSION }}
+
+          # Tag images as VERSION (like 'latest')
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linux386 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linux386
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxamd64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxamd64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv6 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv6
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarmv7 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv7
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxarm64 ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarm64
+          docker tag ${{ env.IMAGE_TAG }}:${{ env.HASH_VERSION }}-linuxppc64le ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxppc64le
+
+          docker manifest create ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }} \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linux386 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxamd64 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv6 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarmv7 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxarm64 \
+          --amend ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}-linuxppc64le
+          docker manifest push ${{ env.IMAGE_TAG_DH }}:${{ env.VERSION }}
 
