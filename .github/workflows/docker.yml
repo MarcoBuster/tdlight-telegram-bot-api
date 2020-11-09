@@ -51,7 +51,7 @@ jobs:
           echo "HASH_VERSION=$HASH_VERSION" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "SAFE_ARCH=$SAFE_ARCH" >> $GITHUB_ENV
-          echo "GITHUB_ACTOR=$GITHUB_ACTOR" >> GITHUB_ENV
+          echo "GITHUB_ACTOR=$GITHUB_ACTOR" >> $GITHUB_ENV
 
           # Print debug info
           echo "hash version: $HASH_VERSION"
